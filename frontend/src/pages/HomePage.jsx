@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { ShoppingBag, Sparkles } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CategoryItem from "../components/CategoryItem.jsx";
+import FeaturedProducts from "../components/FeaturedProducts.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
-import ProductCard from "../components/ProductCard.jsx";
 import { useProductStore } from "../stores/useProductStore.js";
 
 const categoryList = [
@@ -57,18 +57,12 @@ export default function HomePage() {
       </motion.section>
 
       <section className="mb-16">
-        <div className="mb-6 flex items-center gap-2">
-          <Sparkles
-            className="h-5 w-5"
-            style={{ color: "var(--color-accent)" }}
-          />
-          <h2
-            className="font-semibold text-xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Danh mục
-          </h2>
-        </div>
+        <h2
+          className="mb-6 font-semibold text-xl"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Danh mục
+        </h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {categoryList.map((cat) => (
             <CategoryItem category={cat} key={cat} />
@@ -76,29 +70,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {loading ? (
-        <LoadingSpinner />
-      ) : featured.length > 0 ? (
-        <section>
-          <div className="mb-6 flex items-center gap-2">
-            <Sparkles
-              className="h-5 w-5"
-              style={{ color: "var(--color-accent)" }}
-            />
-            <h2
-              className="font-semibold text-xl"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Sản phẩm nổi bật
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-            {featured.map((product, i) => (
-              <ProductCard index={i} key={product._id} product={product} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      {loading ? <LoadingSpinner /> : <FeaturedProducts products={featured} />}
     </main>
   );
 }

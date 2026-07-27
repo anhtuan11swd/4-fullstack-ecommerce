@@ -1,5 +1,31 @@
 import { z } from "zod";
 
+export const createProductSchema = z.object({
+  category: z
+    .string({ message: "Danh mục là bắt buộc" })
+    .trim()
+    .min(1, "Danh mục không được để trống"),
+  description: z
+    .string({ message: "Mô tả sản phẩm là bắt buộc" })
+    .trim()
+    .min(1, "Mô tả không được để trống"),
+  image: z
+    .string({ message: "Hình ảnh là bắt buộc" })
+    .min(1, "Vui lòng chọn ảnh sản phẩm"),
+  name: z
+    .string({ message: "Tên sản phẩm là bắt buộc" })
+    .trim()
+    .min(1, "Tên sản phẩm không được để trống"),
+  price: z
+    .string({ message: "Giá sản phẩm là bắt buộc" })
+    .trim()
+    .min(1, "Giá sản phẩm không được để trống")
+    .refine(
+      (v) => !Number.isNaN(Number(v)) && Number(v) >= 15000,
+      "Giá sản phẩm tối thiểu là 15,000",
+    ),
+});
+
 export const loginSchema = z.object({
   email: z
     .string({ message: "Email là bắt buộc" })
