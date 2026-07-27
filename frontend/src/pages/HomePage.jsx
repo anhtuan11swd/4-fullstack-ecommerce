@@ -1,97 +1,104 @@
 import { motion } from "framer-motion";
-import { Package, Shield, ShoppingBag } from "lucide-react";
+import { ShoppingBag, Sparkles } from "lucide-react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import CategoryItem from "../components/CategoryItem.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import { useProductStore } from "../stores/useProductStore.js";
 
-const features = [
-  {
-    desc: "Mỗi sản phẩm đều được chọn lọc thủ công về chất lượng và tay nghề.",
-    icon: ShoppingBag,
-    title: "Bộ sưu tập chọn lọc",
-  },
-  {
-    desc: "Miễn phí vận chuyển cho đơn hàng trên $50. Giao hàng trong 2–5 ngày làm việc.",
-    icon: Package,
-    title: "Giao hàng nhanh",
-  },
-  {
-    desc: "Được bảo vệ bởi Stripe. Dữ liệu của bạn không bao giờ chạm đến máy chủ của chúng tôi.",
-    icon: Shield,
-    title: "Thanh toán an toàn",
-  },
+const categoryList = [
+  "jeans",
+  "shirts",
+  "shoes",
+  "glasses",
+  "jackets",
+  "suits",
 ];
 
 export default function HomePage() {
+  const { featured, loading, fetchFeaturedProducts } = useProductStore();
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, [fetchFeaturedProducts]);
+
   return (
-    <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <motion.section
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto mb-20 max-w-2xl text-center"
+        className="mx-auto mb-16 max-w-2xl text-center"
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <h1
-          className="mb-4 font-bold text-4xl leading-tight sm:text-5xl"
+          className="mb-3 font-bold text-4xl leading-tight sm:text-5xl"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Mọi thứ bạn cần, được giao hàng cẩn thận.
+          Thời trang cao cấp, cho mọi phong cách
         </h1>
         <p
           className="mx-auto mb-8 max-w-md text-lg"
           style={{ color: "var(--color-ink-2)" }}
         >
-          Khám phá những sản phẩm bền bỉ, từ những thương hiệu chia sẻ giá trị
-          của bạn.
+          Khám phá bộ sưu tập mới nhất từ những thương hiệu hàng đầu
         </p>
-        <a
+        <Link
           className="inline-flex cursor-pointer items-center gap-2 rounded-lg px-6 py-3 font-medium text-sm transition-[transform,opacity] duration-150 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-px"
-          href="/signup"
           style={{
             background: "var(--color-accent)",
             color: "var(--color-paper)",
           }}
+          to="/category/jeans"
         >
           <ShoppingBag className="h-4 w-4" />
-          Bắt đầu mua sắm
-        </a>
+          Mua sắm ngay
+        </Link>
       </motion.section>
 
-      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((feat, i) => (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border p-6 transition-shadow duration-250 hover:shadow-sm"
-            initial={{ opacity: 0, y: 16 }}
-            key={feat.title}
-            style={{
-              background: "var(--color-paper)",
-              borderColor: "var(--color-border)",
-            }}
-            transition={{
-              delay: 0.1 * i,
-              duration: 0.4,
-              ease: [0.16, 1, 0.3, 1],
-            }}
+      <section className="mb-16">
+        <div className="mb-6 flex items-center gap-2">
+          <Sparkles
+            className="h-5 w-5"
+            style={{ color: "var(--color-accent)" }}
+          />
+          <h2
+            className="font-semibold text-xl"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            <div
-              className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg"
-              style={{
-                background: "var(--color-accent)",
-                color: "var(--color-paper)",
-              }}
-            >
-              <feat.icon className="h-5 w-5" />
-            </div>
-            <h3
-              className="mb-1 font-semibold"
+            Danh mục
+          </h2>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {categoryList.map((cat) => (
+            <CategoryItem category={cat} key={cat} />
+          ))}
+        </div>
+      </section>
+
+      {loading ? (
+        <LoadingSpinner />
+      ) : featured.length > 0 ? (
+        <section>
+          <div className="mb-6 flex items-center gap-2">
+            <Sparkles
+              className="h-5 w-5"
+              style={{ color: "var(--color-accent)" }}
+            />
+            <h2
+              className="font-semibold text-xl"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              {feat.title}
-            </h3>
-            <p className="text-sm" style={{ color: "var(--color-ink-2)" }}>
-              {feat.desc}
-            </p>
-          </motion.div>
-        ))}
-      </section>
+              Sản phẩm nổi bật
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+            {featured.map((product, i) => (
+              <ProductCard index={i} key={product._id} product={product} />
+            ))}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

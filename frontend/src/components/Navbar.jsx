@@ -9,10 +9,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../stores/useCartStore.js";
 import { useUserStore } from "../stores/useUserStore.js";
 
 export default function Navbar() {
   const { user, logout } = useUserStore();
+  const { cart } = useCartStore();
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinkClass =
@@ -48,7 +51,20 @@ export default function Navbar() {
 
         <nav className="hidden items-center gap-1 md:flex">
           <Link className={navLinkClass} to="/cart">
-            <ShoppingCart className="h-4 w-4" />
+            <span className="relative">
+              <ShoppingCart className="h-4 w-4" />
+              {cartCount > 0 && (
+                <span
+                  className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full px-1 font-bold text-[10px]"
+                  style={{
+                    background: "var(--color-accent)",
+                    color: "var(--color-paper)",
+                  }}
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
+            </span>
             <span>Giỏ hàng</span>
           </Link>
 
@@ -115,7 +131,20 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
               to="/cart"
             >
-              <ShoppingCart className="h-4 w-4" />
+              <span className="relative">
+                <ShoppingCart className="h-4 w-4" />
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full px-1 font-bold text-[10px]"
+                    style={{
+                      background: "var(--color-accent)",
+                      color: "var(--color-paper)",
+                    }}
+                  >
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
+              </span>
               <span>Giỏ hàng</span>
             </Link>
 
