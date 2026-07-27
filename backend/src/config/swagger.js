@@ -5,6 +5,30 @@ const options = {
   definition: {
     components: {
       schemas: {
+        CartItem: {
+          properties: {
+            product: { example: "665f1a2b3c4d5e6f7a8b9c0d", type: "string" },
+            quantity: { example: 2, type: "number" },
+          },
+          type: "object",
+        },
+        Coupon: {
+          properties: {
+            _id: { example: "665f1a2b3c4d5e6f7a8b9c0d", type: "string" },
+            code: { example: "SAVE10", type: "string" },
+            createdAt: { format: "date-time", type: "string" },
+            discountPercentage: { example: 10, type: "number" },
+            expirationDate: {
+              example: "2026-08-30T00:00:00.000Z",
+              format: "date-time",
+              type: "string",
+            },
+            isActive: { example: true, type: "boolean" },
+            updatedAt: { format: "date-time", type: "string" },
+            userId: { example: "665f1a2b3c4d5e6f7a8b9c0d", type: "string" },
+          },
+          type: "object",
+        },
         Error: {
           properties: {
             message: { example: "Lỗi máy chủ", type: "string" },
