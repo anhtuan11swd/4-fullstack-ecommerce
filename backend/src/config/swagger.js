@@ -11,6 +11,24 @@ const options = {
           },
           type: "object",
         },
+        Product: {
+          properties: {
+            _id: { example: "665f1a2b3c4d5e6f7a8b9c0d", type: "string" },
+            category: { example: "shoes", type: "string" },
+            createdAt: { format: "date-time", type: "string" },
+            description: { example: "Giày thể thao thoải mái", type: "string" },
+            image: {
+              example: "https://res.cloudinary.com/.../nike.png",
+              type: "string",
+            },
+            imagePublicId: { example: "products/abc123", type: "string" },
+            isFeatured: { example: false, type: "boolean" },
+            name: { example: "Nike Air Max", type: "string" },
+            price: { example: 2500000, type: "number" },
+            updatedAt: { format: "date-time", type: "string" },
+          },
+          type: "object",
+        },
         User: {
           properties: {
             _id: { example: "665f1a2b3c4d5e6f7a8b9c0d", type: "string" },
